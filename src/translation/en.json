@@ -1,0 +1,98 @@
+{
+    "product_detail": {
+      "search_placeholder": "Search",
+      "description_tab": "Description",
+      "shipping_tab": "Seller Info",
+      "product_title": "Gray Sofa",
+      "price_label": "$250",
+      "condition_label": "Condition: Slightly used, almost new",
+      "tags": {
+        "tag_bedroom": "Bedroom",
+        "tag_type": "Type",
+        "tag_location": "NYC"
+      },
+      "delivery_options_label": "Delivery Options:",
+      "delivery_options_details": "Pickup, Delivery",
+      "seller_name_label": "Morgan James",
+      "seller_rating_label": "Rating (3)",
+      "similar_items_label": "Similar items you might like?",
+      "contact_seller_button": "Contact Seller",
+      "add_to_cart_button": "+ Add to Cart"
+    },
+    "conversation_page": {
+      "header": "Conversations",
+      "search_placeholder": "Search chat history",
+      "delete_button": "Delete",
+      "photo_preview": "First item image",
+      "home_tab": "Home",
+      "cart_tab": "Cart",
+      "comments_tab": "Comments",
+      "user_tab": "User"
+    },
+    "shopping_cart": {
+      "header": "Your Cart",
+      "delete_all_button": "Delete All",
+      "all_checkbox": "All",
+      "order_total": "Order Total:",
+      "checkout_button": "Checkout",
+      "delete_items_modal_text": "Delete Item(s)?",
+      "delete_items_modal_delete": "Delete",
+      "delete_items_modal_cancel": "Cancel"
+    },
+    "chat_screen": {
+      "header_title": "Aaaaa",
+      "header_rating": "4.98/5",
+      "item_price": "$88.88",
+      "item_details": "Shipping/Pick-up",
+      "send_message_placeholder": "Send message",
+      "send_button": "Send",
+      "options_album": "Album",
+      "options_camera": "Camera",
+      "options_share": "Share",
+      "go_to_profile": "Go to Profile",
+      "block": "Block",
+      "cancel": "Cancel"
+    },
+    "home_page": {
+      "feed": "Feed",
+      "nearby": "Nearby",
+      "sort": "Sort",
+      "location": "Location",
+      "category": "Category",
+      "latest": "Latest",
+      "oldest": "Oldest",
+      "priceHighToLow": "Price High to Low",
+      "priceLowToHigh": "Price Low to High",
+      "menuItemA": "Menu item A",
+      "menuItemB": "Menu item B",
+      "menuItemC": "Menu item C",
+      "menuItemD": "Menu item D",
+      "state": "State",
+      "city": "City",
+      "area": "Area",
+      "bedroom": "Bedroom",
+      "livingRoom": "Living Room",
+      "kitchen": "Kitchen",
+      "electronics": "Electronics",
+      "clothesShoes": "Clothes/Shoes",
+      "lighting": "Lighting",
+      "others": "Others",
+      "searchPlaceholder": "Search",
+      "featuredProducts": "Featured Products",
+      "productImage": "Product Image",
+      "nearYou": "Near You",
+      "priceDrop": "Price Drop",
+      "pickUp": "Pick-up",
+      "delivery": "Delivery",
+      "user": "User",
+      "productName": "Product name"
+    },
+    "order_items_page": {
+      "header": "Items ({{count}})",
+      "items": {
+        "table": "Table",
+        "bed": "Bed",
+        "pink_chair_sofa": "Pink Chair Sofa"
+      }
+    }
+  }

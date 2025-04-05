@@ -1,0 +1,98 @@
+{
+  "product_detail": {
+    "search_placeholder": "搜索",
+    "description_tab": "物品描述",
+    "shipping_tab": "卖家信息",
+    "product_title": "灰色沙发",
+    "price_label": "$250",
+    "condition_label": "物品状态: 有轻微使用痕迹，几乎全新",
+    "tags": {
+      "tag_bedroom": "卧室",
+      "tag_type": "种类",
+      "tag_location": "纽约"
+    },
+    "delivery_options_label": "送货选项:",
+    "delivery_options_details": "自取, 快递",
+    "seller_name_label": "摩根·詹姆斯 (Morgan James)",
+    "seller_rating_label": "评分 (3)",
+    "similar_items_label": "你可能感兴趣的相似物品？",
+    "contact_seller_button": "联系卖家",
+    "add_to_cart_button": "+ 加入购物车"
+  },
+  "conversation_page": {
+    "header": "对话",
+    "search_placeholder": "查找聊天记录",
+    "delete_button": "删除",
+    "photo_preview": "物品的第一张图片",
+    "home_tab": "首页",
+    "cart_tab": "购物车",
+    "comments_tab": "评论",
+    "user_tab": "用户"
+  },
+  "shopping_cart": {
+    "header": "购物车",
+    "delete_all_button": "全部删除",
+    "all_checkbox": "全选",
+    "order_total": "订单总计：",
+    "checkout_button": "结账",
+    "delete_items_modal_text": "删除物品?",
+    "delete_items_modal_delete": "删除",
+    "delete_items_modal_cancel": "取消"
+  },
+  "chat_screen": {
+    "header_title": "Aaaaa",
+    "header_rating": "4.98/5",
+    "item_price": "¥88.88",
+    "item_details": "配送/自取",
+    "send_message_placeholder": "发送消息",
+    "send_button": "发送",
+    "options_album": "相册",
+    "options_camera": "相机",
+    "options_share": "分享",
+    "go_to_profile": "个人主页",
+    "block": "屏蔽",
+    "cancel": "取消"
+  },
+  "home_page": {
+    "feed": "动态",
+    "nearby": "附近",
+    "sort": "排序",
+    "location": "位置",
+    "category": "类别",
+    "latest": "最新",
+    "oldest": "最旧",
+    "priceHighToLow": "价格从高到低",
+    "priceLowToHigh": "价格从低到高",
+    "menuItemA": "菜单项A",
+    "menuItemB": "菜单项B",
+    "menuItemC": "菜单项C",
+    "menuItemD": "菜单项D",
+    "state": "州",
+    "city": "城市",
+    "area": "地区",
+    "bedroom": "卧室",
+    "livingRoom": "客厅",
+    "kitchen": "厨房",
+    "electronics": "电子产品",
+    "clothesShoes": "衣服/鞋子",
+    "lighting": "照明",
+    "others": "其他",
+    "searchPlaceholder": "搜索",
+    "featuredProducts": "特色商品",
+    "productImage": "商品图片",
+    "nearYou": "附近",
+    "priceDrop": "降价",
+    "pickUp": "自取",
+    "delivery": "快递",
+    "user": "用户",
+    "productName": "商品名称"
+  },
+  "order_items_page": {
+    "header": "物品 ({{count}})",
+    "items": {
+      "table": "桌子",
+      "bed": "床",
+      "pink_chair_sofa": "粉色椅子沙发"
+    }
+  }
+}
