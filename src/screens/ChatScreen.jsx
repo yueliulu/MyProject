@@ -22,15 +22,9 @@ const ChatScreen = ({navigation}) => {
   const [messages, setMessages] = useState([
     { id: '1', text: 'Hello', sender: 'user' },
     { id: '2', text: 'Hi', sender: 'other' },
-    { id: '3', text: 'How are you? Como estas? 你好不好🎵', sender: 'user' },
-    { id: '4', text: 'I am fine, thank you!', sender: 'other' },
-    { id: '5', text: 'I am fine, thank you!', sender: 'user' },
-    { id: '6', text: 'I am fine, thank you!', sender: 'other' },
-    { id: '7', text: 'I am fine, thank you!', sender: 'user' },
-    { id: '8', text: 'I am fine, thank you!', sender: 'other' },
-    { id: '9', text: 'I am fine, thank you!', sender: 'user' },
-    { id: '10', text: 'I am fine, thank you!', sender: 'other' },
-    { id: '11', text: 'Help', sender: 'user' },
+    { id: '3', text: 'How much is the desk', sender: 'user' },
+    { id: '4', text: 'It is $15. You can choose to pick it up youself or delivery', sender: 'other' },
+    { id: '5', text: 'Sounds good! I will let you know if I decide to buy it', sender: 'user' },
   ]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState(false);
