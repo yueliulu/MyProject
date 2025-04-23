@@ -41,7 +41,7 @@ const HomePage = ({ navigation }) => {
   });
 
   const toggleFilter = (filterName) => {
-    setActiveFilter((prev) => (prev === filterName ? null : filterName));
+    setActiveFilter(prev => (prev === filterName ? null : filterName));
   };
 
   return (
@@ -49,7 +49,7 @@ const HomePage = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <SearchBar />
         <View style={styles.navigationTabs}>
-          {TAB_KEYS.map((tabKey) => (
+          {TAB_KEYS.map(tabKey => (
             <TouchableOpacity
               key={tabKey}
               onPress={() => setActiveTab(tabKey)}
@@ -61,7 +61,9 @@ const HomePage = ({ navigation }) => {
               <Text
                 style={[
                   styles.tabText,
-                  activeTab === tabKey ? styles.activeTabText : styles.inactiveTabText,
+                  activeTab === tabKey
+                    ? styles.activeTabText
+                    : styles.inactiveTabText,
                 ]}
               >
                 {t(`home_page.${tabKey}`)}
@@ -71,7 +73,7 @@ const HomePage = ({ navigation }) => {
         </View>
 
         <Divider />
-        
+
         <View style={styles.filterRow}>
           <View style={styles.filterOptions}>
             <TouchableOpacity onPress={() => toggleFilter('sort')} style={styles.filterButton}>
@@ -84,34 +86,24 @@ const HomePage = ({ navigation }) => {
               <Text style={styles.filterButtonText}>{t('home_page.category')}</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.filterIconContainer}>
-            <Image
-              source={require('../assets/Filter.png')}
-              style={styles.filterIcon}
-            />
-          </View>
         </View>
+
         <ProductListing navigation={navigation} />
       </ScrollView>
-      
+
       <BottomNavigation navigation={navigation} />
 
       {activeFilter && (
         <View style={styles.subOptionsContainer}>
           {activeFilter === 'sort' && (
-            <SortOverlay
-              sortFilters={sortFilters}
-              setSortFilters={setSortFilters}
-            />
+            <SortOverlay sortFilters={sortFilters} setSortFilters={setSortFilters} />
           )}
-
           {activeFilter === 'location' && (
             <LocationOverlay
               activeLocationTab={activeLocationTab}
               setActiveLocationTab={setActiveLocationTab}
             />
           )}
-
           {activeFilter === 'category' && (
             <CategoryOverlay
               categoryFilters={categoryFilters}
@@ -126,34 +118,21 @@ const HomePage = ({ navigation }) => {
 
 const SortOverlay = ({ sortFilters, setSortFilters }) => {
   const { t } = useTranslation();
-
-  const toggleCheck = (key) => {
-    setSortFilters((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const toggleCheck = key =>
+    setSortFilters(prev => ({ ...prev, [key]: !prev[key] }));
 
   return (
     <View style={styles.sortOverlay}>
       <View style={styles.sortRow}>
         <View style={styles.checkboxWrapper}>
-          <CheckBox
-            checked={sortFilters.latest}
-            onPress={() => toggleCheck('latest')}
-          />
+          <CheckBox checked={sortFilters.latest} onPress={() => toggleCheck('latest')} />
           <Text style={styles.subOptionText}>{t('home_page.latest')}</Text>
         </View>
-
         <View style={styles.checkboxWrapper}>
-          <CheckBox
-            checked={sortFilters.oldest}
-            onPress={() => toggleCheck('oldest')}
-          />
+          <CheckBox checked={sortFilters.oldest} onPress={() => toggleCheck('oldest')} />
           <Text style={styles.subOptionText}>{t('home_page.oldest')}</Text>
         </View>
       </View>
-
       <View style={styles.sortRow}>
         <View style={styles.checkboxWrapper}>
           <CheckBox
@@ -162,7 +141,6 @@ const SortOverlay = ({ sortFilters, setSortFilters }) => {
           />
           <Text style={styles.subOptionText}>{t('home_page.priceHighToLow')}</Text>
         </View>
-
         <View style={styles.checkboxWrapper}>
           <CheckBox
             checked={sortFilters.priceLowToHigh}
@@ -175,61 +153,35 @@ const SortOverlay = ({ sortFilters, setSortFilters }) => {
   );
 };
 
-const LocationOverlay = ({
-  activeLocationTab,
-  setActiveLocationTab,
-}) => {
+const LocationOverlay = ({ activeLocationTab, setActiveLocationTab }) => {
   const { t } = useTranslation();
-
-  const LOCATION_ITEMS = ['menuItemA', 'menuItemB', 'menuItemC', 'menuItemD'];
+  const ITEMS = ['menuItemA', 'menuItemB', 'menuItemC', 'menuItemD'];
 
   return (
     <View style={styles.locationOverlay}>
       <View style={styles.locationTabRow}>
-        <TouchableOpacity
-          style={[
-            styles.locationTab,
-            activeLocationTab === 'state' && styles.locationTabActive,
-          ]}
-          onPress={() => setActiveLocationTab('state')}
-        >
-          <Text style={styles.locationTabText}>{t('home_page.state')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.locationTab,
-            activeLocationTab === 'city' && styles.locationTabActive,
-          ]}
-          onPress={() => setActiveLocationTab('city')}
-        >
-          <Text style={styles.locationTabText}>{t('home_page.city')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.locationTab,
-            activeLocationTab === 'area' && styles.locationTabActive,
-          ]}
-          onPress={() => setActiveLocationTab('area')}
-        >
-          <Text style={styles.locationTabText}>{t('home_page.area')}</Text>
-        </TouchableOpacity>
+        {['state','city','area'].map(tab => (
+          <TouchableOpacity
+            key={tab}
+            style={[
+              styles.locationTab,
+              activeLocationTab === tab && styles.locationTabActive,
+            ]}
+            onPress={() => setActiveLocationTab(tab)}
+          >
+            <Text style={styles.locationTabText}>{t(`home_page.${tab}`)}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
-
       <View style={styles.locationDropdown}>
-        {LOCATION_ITEMS.map((itemKey, idx) => (
+        {ITEMS.map((k, i) => (
           <TouchableHighlight
-            key={idx}
+            key={i}
             style={styles.dropdownItemContainer}
             underlayColor="#FBC8AE"
-            onPress={() => {
-              console.log('Location item pressed:', t(`home_page.${itemKey}`));
-            }}
+            onPress={() => {}}
           >
-            <Text style={styles.dropdownItemText}>
-              {t(`home_page.${itemKey}`)}
-            </Text>
+            <Text style={styles.dropdownItemText}>{t(`home_page.${k}`)}</Text>
           </TouchableHighlight>
         ))}
       </View>
@@ -239,103 +191,45 @@ const LocationOverlay = ({
 
 const CategoryOverlay = ({ categoryFilters, setCategoryFilters }) => {
   const { t } = useTranslation();
+  const toggle = key =>
+    setCategoryFilters(prev => ({ ...prev, [key]: !prev[key] }));
 
-  const toggleCheck = (key) => {
-    setCategoryFilters((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const rows = [
+    ['bedroom','livingRoom','kitchen'],
+    ['electronics','clothesShoes','lighting'],
+    ['others']
+  ];
 
   return (
     <View style={styles.categoryOverlay}>
-      <View style={styles.categoryRow}>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.bedroom}
-            onPress={() => toggleCheck('bedroom')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.bedroom')}</Text>
+      {rows.map((cols, ri) => (
+        <View key={ri} style={styles.categoryRow}>
+          {cols.map(key => (
+            <View key={key} style={styles.checkboxContainer}>
+              <CheckBox checked={categoryFilters[key]} onPress={() => toggle(key)} />
+              <Text style={styles.subOptionText}>{t(`home_page.${key}`)}</Text>
+            </View>
+          ))}
         </View>
-
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.livingRoom}
-            onPress={() => toggleCheck('livingRoom')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.livingRoom')}</Text>
-        </View>
-
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.kitchen}
-            onPress={() => toggleCheck('kitchen')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.kitchen')}</Text>
-        </View>
-      </View>
-
-      <View style={styles.categoryRow}>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.electronics}
-            onPress={() => toggleCheck('electronics')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.electronics')}</Text>
-        </View>
-
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.clothesShoes}
-            onPress={() => toggleCheck('clothesShoes')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.clothesShoes')}</Text>
-        </View>
-
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.lighting}
-            onPress={() => toggleCheck('lighting')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.lighting')}</Text>
-        </View>
-      </View>
-
-      <View style={styles.categoryRow}>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            checked={categoryFilters.others}
-            onPress={() => toggleCheck('others')}
-          />
-          <Text style={styles.subOptionText}>{t('home_page.others')}</Text>
-        </View>
-      </View>
+      ))}
     </View>
   );
 };
 
 const SearchBar = () => {
   const { t } = useTranslation();
-  const [searchText, setSearchText] = useState("");
-
-  const handleSearch = () => {
-    console.log("Search button pressed with text:", searchText);
-  };
-
+  const [txt, setTxt] = useState('');
   return (
     <View style={styles.searchBar}>
       <TextInput
         style={styles.searchInput}
         placeholder={t('home_page.searchPlaceholder')}
         placeholderTextColor="#777"
-        value={searchText}
-        onChangeText={setSearchText}
+        value={txt}
+        onChangeText={setTxt}
       />
-      <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
-        <Image
-          source={require('../assets/Search.png')}
-          style={styles.searchIcon}
-        />
+      <TouchableOpacity style={styles.searchButton}>
+        <Image source={require('../assets/Search.png')} style={styles.searchIcon} />
       </TouchableOpacity>
     </View>
   );
@@ -344,129 +238,67 @@ const SearchBar = () => {
 const Divider = () => <View style={styles.divider} />;
 
 const products = [
-  { 
-    id: 1, 
-    name: 'productName', 
-    price: 50, 
-    tag: 'nearYou',
-    location: 'NYC',
-    type: 'pickUp',
-    userIndex: 1,
-    userImage: 'https://via.placeholder.com/40' 
-  },
-  { 
-    id: 2, 
-    name: 'productName', 
-    price: 80, 
-    tag: 'priceDrop',
-    location: 'NYC',
-    type: 'delivery',
-    userIndex: 2,
-    userImage: 'https://via.placeholder.com/40' 
-  },
-  { 
-    id: 3, 
-    name: 'productName', 
-    price: 50, 
-    tag: 'nearYou', 
-    location: 'NYC',
-    type: 'pickUp',
-    userIndex: 3,
-    userImage: 'https://via.placeholder.com/40' 
-  },
-  { 
-    id: 4, 
-    name: 'productName', 
-    price: 80, 
-    tag: 'priceDrop', 
-    location: 'NYC',
-    type: 'delivery',
-    userIndex: 4,
-    userImage: 'https://via.placeholder.com/40' 
-  },
+  { id:1,name:'productName',price:50,tag:'nearYou',location:'NYC',type:'pickUp',userIndex:1 },
+  { id:2,name:'productName',price:80,tag:'priceDrop',location:'NYC',type:'delivery',userIndex:2 },
+  { id:3,name:'productName',price:50,tag:'nearYou',location:'NYC',type:'pickUp',userIndex:3 },
+  { id:4,name:'productName',price:80,tag:'priceDrop',location:'NYC',type:'delivery',userIndex:4 },
 ];
 
 const ProductListing = ({ navigation }) => {
   const { t } = useTranslation();
-
   return (
     <View style={styles.productListing}>
-      <Text style={styles.featuredText}>
-        {t('home_page.featuredProducts')}
-      </Text>
-      <View style={styles.productRow}>
-        {products.slice(0, 2).map((product) => (
-          <ProductCard key={product.id} product={product} navigation={navigation} />
-        ))}
-      </View>
-      <View style={styles.productRow}>
-        {products.slice(2, 4).map((product) => (
-          <ProductCard key={product.id} product={product} navigation={navigation} />
-        ))}
-      </View>
+      <Text style={styles.featuredText}>{t('home_page.featuredProducts')}</Text>
+      {[0,2].map(i => (
+        <View key={i} style={styles.productRow}>
+          {products.slice(i,i+2).map(p => (
+            <ProductCard key={p.id} product={p} navigation={navigation} />
+          ))}
+        </View>
+      ))}
     </View>
   );
 };
 
 const ProductCard = ({ product, navigation }) => {
   const { t } = useTranslation();
-  const { id, name, price, tag, location, type, userIndex, userImage } = product;
-
+  const { id,name,price,tag,location,type,userIndex } = product;
   return (
     <TouchableOpacity
       style={styles.productCard}
-      onPress={() => {
-        navigation.navigate('ProductDetailPage', { productId: id });
-      }}
+      onPress={() => navigation.navigate('ProductDetailPage',{productId:id})}
     >
       <View style={styles.productImageContainer}>
-        <Text style={styles.productTag}>
-          {t(`home_page.${tag}`)}
-        </Text>
-        <Text style={styles.productImageText}>
-          {t('home_page.productImage')}
-        </Text>
+        <Image source={require('../assets/table.png')} style={styles.productImage}/>
+        <Text style={styles.productTag}>{t(`home_page.${tag}`)}</Text>
       </View>
-
-      <Text style={styles.productName}>
-        {t(`home_page.${name}`)} {price}
-      </Text>
-
+      <Text style={styles.productName}>{t(`home_page.${name}`)} {price}</Text>
       <View style={styles.productInfo}>
         <View style={styles.tagContainer}>
           <Text style={styles.tagText}>{location}</Text>
           <Text style={styles.tagText}>{t(`home_page.${type}`)}</Text>
         </View>
-
         <View style={styles.userInfo}>
-          <Image source={{ uri: userImage }} style={styles.userImage} />
-          <Text style={styles.userText}>
-            {t('home_page.user')} {userIndex}
-          </Text>
+          <Image source={require('../assets/Morgan_James.png')} style={styles.userImage} />
+          <Text style={styles.userText}>{t('home_page.user')} {userIndex}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
-const BottomNavigation = ({ style, navigation }) => {
-  const handleNavigation = (index) => {
-    const routes = ['HomePage', 'ShoppingCart', 'CreatePost', 'ConversationPage', 'Profile'];
-    navigation.navigate(routes[index]);
-  };
+const BottomNavigation = ({ navigation }) => {
+  const routes = ['HomePage','ShoppingCart','ConversationPage'];
   const icons = [
     require('../assets/Home.png'),
     require('../assets/Shopping_cart.png'),
-    require('../assets/Add.png'),
     require('../assets/Chat.png'),
-    require('../assets/User.png'),
   ];
-
   return (
-    <View style={[styles.bottomNavigation, style]}>
-      {icons.map((icon, index) => (
-        <TouchableOpacity key={index} onPress={() => handleNavigation(index)}>
-          <Image source={icon} style={styles.bottomIcon} />
+    <View style={styles.bottomNavigation}>
+      {icons.map((ic,idx) => (
+        <TouchableOpacity key={idx} onPress={()=>navigation.navigate(routes[idx])}>
+          <Image source={ic} style={styles.bottomIcon}/>
         </TouchableOpacity>
       ))}
     </View>
@@ -562,13 +394,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  filterIconContainer: {
-    padding: 5,
-  },
-  filterIcon: {
-    width: 24,
-    height: 24,
-  },
   productListing: {
     width: '90%',
     marginTop: 10,
@@ -599,6 +424,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     position: 'relative',
+    overflow: 'hidden',
+  },
+  productImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
   },
   productTag: {
     fontSize: 12,
@@ -609,10 +440,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
     left: 5,
-  },
-  productImageText: {
-    fontSize: 12,
-    color: '#666',
   },
   productName: {
     fontSize: 16,

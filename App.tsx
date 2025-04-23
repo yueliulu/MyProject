@@ -9,7 +9,9 @@ import ShoppingCart from './src/screens/ShoppingCart';
 import HomePage from './src/screens/Home';
 import ConversationPage from './src/screens/ConversationPage';
 import ChatScreen from './src/screens/ChatScreen';
-import OrderItems from './src/screens/OrderItems';
+import CheckoutScreen from './src/screens/CheckoutScreen';
+import ShippingScreen from './src/screens/ShippingScreen';
+import OrderConfirmation from './src/screens/OrderConfirmation';
 
 const Stack = createStackNavigator();
 
@@ -45,8 +47,18 @@ function App(): React.JSX.Element {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="OrderItems"
-            component={OrderItems}
+            name="CheckoutScreen"
+            component={CheckoutScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ShippingScreen"
+            component={ShippingScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OrderConfirmation"
+            component={OrderConfirmation}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

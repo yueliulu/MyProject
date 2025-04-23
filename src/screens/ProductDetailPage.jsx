@@ -8,7 +8,6 @@ import {
   Dimensions,
   ScrollView,
   TextInput,
-  Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -16,8 +15,6 @@ const ProductDetailPage = ({ navigation }) => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState('Description');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const screenWidth = Dimensions.get('window').width;
   const handleBack = () => {
     navigation.navigate('HomePage');
   };
@@ -25,7 +22,7 @@ const ProductDetailPage = ({ navigation }) => {
     navigation.navigate('ShoppingCart');
   };
   const handleContact = () => {
-    navigation.navigate('ConversationPage');
+    navigation.navigate('ChatScreen');
   };
 
   return (
@@ -49,29 +46,6 @@ const ProductDetailPage = ({ navigation }) => {
             editable={true}
             selectTextOnFocus={true}
           />
-        </View>
-
-        <View style={styles.topNavIcons}>
-          <TouchableOpacity
-            style={styles.navIcon}
-            onPress={() => setIsBookmarked(!isBookmarked)}
-          >
-            <Image
-              source={
-                isBookmarked
-                  ? require('../assets/Bookmark_filled.png')
-                  : require('../assets/Bookmark_light.png')
-              }
-              style={styles.navIconImage}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.navIcon}>
-            <Image
-              source={require('../assets/Meatballs_menu.png')}
-              style={[styles.navIconImage, { tintColor: 'black' }]}
-            />
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -269,7 +243,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   searchBarContainer: {
-    flex: 1,
+    width: Dimensions.get('window').width * 0.7,
     marginLeft: 10,
   },
   searchInput: {
@@ -280,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    flex: 1,
+    height: 45,
   },
   topNavIcons: {
     flexDirection: 'row',

@@ -14,22 +14,24 @@ import {
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
-import ConversationPage from './ConversationPage';
 
-const ChatScreen = ({navigation}) => {
+const ChatScreen = ({ navigation }) => {
   const { t } = useTranslation();
 
   const [messages, setMessages] = useState([
     { id: '1', text: 'Hello', sender: 'user' },
     { id: '2', text: 'Hi', sender: 'other' },
     { id: '3', text: 'How much is the desk', sender: 'user' },
-    { id: '4', text: 'It is $15. You can choose to pick it up youself or delivery', sender: 'other' },
+    { id: '4', text: 'It is $15. You can choose to pick it up yourself or delivery', sender: 'other' },
     { id: '5', text: 'Sounds good! I will let you know if I decide to buy it', sender: 'user' },
   ]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
   const flatListRef = useRef(null);
+  const textInputRef = useRef(null);
+
   const handleInputFocus = () => {
     if (flatListRef.current) {
       setTimeout(() => {
@@ -46,8 +48,8 @@ const ChatScreen = ({navigation}) => {
 
   const handleSend = () => {
     if (input.trim() || selectedImage) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
+      setMessages(prev => [
+        ...prev,
         {
           id: Date.now().toString(),
           text: input.trim(),
@@ -62,20 +64,11 @@ const ChatScreen = ({navigation}) => {
 
   const handleOpenAlbum = () => {
     launchImageLibrary(
-      {
-        mediaType: 'photo',
-        selectionLimit: 1,
-      },
-      (response) => {
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.errorCode) {
-          console.log('ImagePicker Error: ', response.errorCode);
-        } else {
-          if (response.assets && response.assets.length > 0) {
-            setSelectedImage(response.assets[0]);
-            setShowOptions(false);
-          }
+      { mediaType: 'photo', selectionLimit: 1 },
+      response => {
+        if (response.assets?.length) {
+          setSelectedImage(response.assets[0]);
+          setShowOptions(false);
         }
       }
     );
@@ -83,55 +76,19 @@ const ChatScreen = ({navigation}) => {
 
   const handleOpenCamera = () => {
     launchCamera(
-      {
-        mediaType: 'photo',
-        cameraType: 'back',
-      },
-      (response) => {
-        if (response.didCancel) {
-          console.log('User cancelled camera');
-        } else if (response.errorCode) {
-          console.error('Camera Error: ', response.errorMessage);
-        } else {
-          if (response.assets && response.assets.length > 0) {
-            setSelectedImage(response.assets[0]);
-            setShowOptions(false);
-          }
+      { mediaType: 'photo', cameraType: 'back' },
+      response => {
+        if (response.assets?.length) {
+          setSelectedImage(response.assets[0]);
+          setShowOptions(false);
         }
       }
     );
   };
 
-  const handleMenuPress = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [
-            t('chat_screen.go_to_profile'),
-            t('chat_screen.block'),
-            t('chat_screen.cancel'),
-          ],
-          cancelButtonIndex: 2,
-          destructiveButtonIndex: 1,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 0) {
-          } else if (buttonIndex === 1) {
-          }
-        }
-      );
-    } else {
-      Alert.alert(
-        'Options',
-        '',
-        [
-          { text: t('chat_screen.go_to_profile'), onPress: () => {} },
-          { text: t('chat_screen.block'), onPress: () => {}, style: 'destructive' },
-          { text: t('chat_screen.cancel'), onPress: () => {}, style: 'cancel' },
-        ],
-        { cancelable: true }
-      );
-    }
+  // New function to handle navigation to CheckoutScreen
+  const handleBuyButtonPress = () => {
+    navigation.navigate('CheckoutScreen');
   };
 
   const renderMessage = ({ item }) => {
@@ -143,14 +100,24 @@ const ChatScreen = ({navigation}) => {
           isUser ? styles.userMessage : styles.otherMessage,
         ]}
       >
-        {!isUser && <View style={styles.avatar} />}
+        {!isUser && (
+          <Image
+            source={require('../assets/Morgan_James.png')}
+            style={styles.avatar}
+          />
+        )}
         <View style={[styles.bubble, isUser ? styles.userBubble : styles.otherBubble]}>
           {item.image && (
             <Image source={{ uri: item.image.uri }} style={styles.messageImage} />
           )}
-          {item.text ? <Text style={styles.messageText}>{item.text}</Text> : null}
+          {item.text && <Text style={styles.messageText}>{item.text}</Text>}
         </View>
-        {isUser && <View style={styles.avatar} />}
+        {isUser && (
+          <Image
+            source={require('../assets/Morgan_James.png')}
+            style={styles.avatar}
+          />
+        )}
       </View>
     );
   };
@@ -163,57 +130,72 @@ const ChatScreen = ({navigation}) => {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
             <Text style={styles.backButtonText}>{'<'}</Text>
           </TouchableOpacity>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>{t('chat_screen.header_title')}</Text>
             <Text style={styles.headerRating}>{t('chat_screen.header_rating')}</Text>
           </View>
-          <TouchableOpacity style={styles.menuButton} onPress={handleMenuPress}>
-            <Text style={styles.menuButtonText}>...</Text>
-          </TouchableOpacity>
         </View>
-
         <View style={styles.separator} />
-
         <View style={styles.itemInfo}>
-          <View style={styles.itemImage} />
-          <View>
+          <Image
+            source={require('../assets/table.png')}
+            style={styles.itemImage}
+          />
+          <View style={styles.itemTextContainer}>
             <Text style={styles.itemPrice}>{t('chat_screen.item_price')}</Text>
             <Text style={styles.itemDetails}>{t('chat_screen.item_details')}</Text>
           </View>
+          <View style={styles.itemButtonContainer}>
+            <TouchableOpacity 
+              style={styles.sendButton}
+              onPress={handleBuyButtonPress}
+            >
+              <Text style={styles.sendButtonText}>Buy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.sendButton, { marginLeft: 8, minWidth: 120 }]}
+              onPress={() => textInputRef.current?.focus()}
+            >
+              <Text style={styles.sendButtonText}>Make an offer</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
         <View style={styles.chatContainer}>
           <FlatList
             ref={flatListRef}
             data={messages}
             renderItem={renderMessage}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             contentContainerStyle={styles.chatContent}
             style={{ flex: 1 }}
             onContentSizeChange={() => {
-              if (flatListRef.current) {
-                flatListRef.current.scrollToEnd({ animated: true });
-              }
+              flatListRef.current?.scrollToEnd({ animated: true });
             }}
           />
         </View>
-
         <View style={styles.inputContainer}>
           {selectedImage && (
             <View style={styles.selectedImageContainer}>
-              <Image source={{ uri: selectedImage.uri }} style={styles.selectedImage} />
+              <Image
+                source={{ uri: selectedImage.uri }}
+                style={styles.selectedImage}
+              />
               <TouchableOpacity
                 style={styles.removeImageButton}
                 onPress={() => setSelectedImage(null)}
               >
-                <Text style={styles.removeImageText}>x</Text>
+                <Text style={styles.removeImageText}>×</Text>
               </TouchableOpacity>
             </View>
           )}
           <TextInput
+            ref={textInputRef}
             style={styles.textInput}
             placeholder={t('chat_screen.send_message_placeholder')}
             value={input}
@@ -228,23 +210,45 @@ const ChatScreen = ({navigation}) => {
             <Text style={styles.plusButtonText}>+</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-            <Text style={styles.sendButtonText}>{t('chat_screen.send_button')}</Text>
+            <Text style={styles.sendButtonText}>
+              {t('chat_screen.send_button')}
+            </Text>
           </TouchableOpacity>
         </View>
-
         {showOptions && (
           <View style={styles.optionsContainer}>
-            <TouchableOpacity style={styles.optionButton} onPress={handleOpenAlbum}>
-              <View style={styles.optionIcon} />
-              <Text style={styles.optionText}>{t('chat_screen.options_album')}</Text>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={handleOpenAlbum}
+            >
+              <Image
+                source={require('../assets/table.png')}
+                style={styles.optionIcon}
+              />
+              <Text style={styles.optionText}>
+                {t('chat_screen.options_album')}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={handleOpenCamera}>
-              <View style={styles.optionIcon} />
-              <Text style={styles.optionText}>{t('chat_screen.options_camera')}</Text>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={handleOpenCamera}
+            >
+              <Image
+                source={require('../assets/table.png')}
+                style={styles.optionIcon}
+              />
+              <Text style={styles.optionText}>
+                {t('chat_screen.options_camera')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <View style={styles.optionIcon} />
-              <Text style={styles.optionText}>{t('chat_screen.options_share')}</Text>
+              <Image
+                source={require('../assets/table.png')}
+                style={styles.optionIcon}
+              />
+              <Text style={styles.optionText}>
+                {t('chat_screen.options_share')}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -261,6 +265,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
     paddingBottom: 10,
+    paddingTop: 50,
     backgroundColor: '#FFFDF8',
   },
   backButton: { padding: 5 },
@@ -272,8 +277,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: 'bold' },
   headerRating: { fontSize: 14, color: '#555' },
-  menuButton: { padding: 5, marginLeft: 'auto' },
-  menuButtonText: { fontSize: 20, fontWeight: 'bold' },
   separator: {
     height: 1,
     backgroundColor: '#EEE',
@@ -288,12 +291,18 @@ const styles = StyleSheet.create({
   itemImage: {
     width: 50,
     height: 50,
-    backgroundColor: '#CCC',
     marginRight: 10,
     borderRadius: 5,
   },
+  itemTextContainer: {
+    flex: 1,
+  },
   itemPrice: { fontSize: 16, fontWeight: 'bold', color: '#FF8F2D' },
   itemDetails: { fontSize: 14, color: '#555' },
+  itemButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   chatContainer: { flex: 1 },
   chatContent: { paddingHorizontal: 15, paddingBottom: 10 },
   messageContainer: {
@@ -306,7 +315,6 @@ const styles = StyleSheet.create({
   avatar: {
     width: 30,
     height: 30,
-    backgroundColor: '#CCC',
     borderRadius: 15,
     marginHorizontal: 10,
   },
@@ -314,7 +322,6 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#E5E5E5',
   },
   userBubble: { backgroundColor: '#FBC8AE', marginLeft: 10 },
   otherBubble: { backgroundColor: '#E5E5E5', marginRight: 10 },
@@ -332,28 +339,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#EEE',
     backgroundColor: '#FFFDF8',
     padding: 10,
-  },
-  selectedImageContainer: {
-    position: 'relative',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  selectedImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-  },
-  removeImageButton: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 2,
-  },
-  removeImageText: {
-    fontSize: 14,
-    color: '#000',
   },
   textInput: {
     flex: 1,
@@ -376,24 +361,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  plusButtonText: {
-    fontSize: 24,
-    color: 'black',
-  },
+  plusButtonText: { fontSize: 24, color: 'black' },
   sendButton: {
     marginLeft: 8,
-    width: 60,
     height: 40,
     backgroundColor: '#FF8F2D',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 15,
   },
-  sendButtonText: {
-    fontSize: 16,
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
+  sendButtonText: { fontSize: 16, color: '#FFF', fontWeight: 'bold' },
   optionsContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFDF8',
@@ -402,21 +380,35 @@ const styles = StyleSheet.create({
     borderTopColor: '#EEE',
     marginBottom: 50,
   },
-  optionButton: {
-    flex: 1,
-    alignItems: 'center',
-  },
+  optionButton: { flex: 1, alignItems: 'center' },
   optionIcon: {
     width: 50,
     height: 50,
-    backgroundColor: '#CCC',
     borderRadius: 10,
     marginBottom: 5,
   },
-  optionText: {
-    fontSize: 14,
-    color: '#333',
+  optionText: { fontSize: 14, color: '#333' },
+  selectedImageContainer: {
+    position: 'relative',
+    marginRight: 8,
   },
+  selectedImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 5,
+  },
+  removeImageButton: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    width: 20,
+    height: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  removeImageText: { color: 'white', fontWeight: 'bold' },
 });
 
 export default ChatScreen;
