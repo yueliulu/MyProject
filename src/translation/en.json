@@ -42,7 +42,7 @@
     "chat_screen": {
       "header_title": "Aaaaa",
       "header_rating": "4.98/5",
-      "item_price": "$88.88",
+      "item_price": "$50.5",
       "item_details": "Shipping/Pick-up",
       "send_message_placeholder": "Send message",
       "send_button": "Send",
@@ -52,6 +52,33 @@
       "go_to_profile": "Go to Profile",
       "block": "Block",
       "cancel": "Cancel"
+    },
+    "checkout_screen": {
+      "header": "Checkout",
+      "amount_label": "Subtotal:",
+      "shipping_label": "Shipping Fee:",
+      "tax_label": "Tax Included (GST + PST):",
+      "total_label": "Order Total:",
+      "proceed_to_shipping": "Proceed to Shipping"
+    },
+    "shipping_page": {
+      "header": "Shipping Information",
+      "saved_addresses": "Default Address",
+      "save_address": "Save",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "E-mail",
+      "phone": "Phone Number",
+      "city": "City",
+      "address": "Shipping Address",
+      "country": "Country",
+      "proceed_to_checkout": "Proceed to Checkout",
+      "payment_information": "Payment Information",
+      "card_name": "Card Name",
+      "card_number": "Card Number",
+      "confirm_order": "Confirm Order",
+      "show_more": "Show More",
+      "hide_addresses": "Hide Address"
     },
     "home_page": {
       "feed": "Feed",
@@ -86,13 +113,5 @@
       "delivery": "Delivery",
       "user": "User",
       "productName": "Product name"
-    },
-    "order_items_page": {
-      "header": "Items ({{count}})",
-      "items": {
-        "table": "Table",
-        "bed": "Bed",
-        "pink_chair_sofa": "Pink Chair Sofa"
-      }
     }
   }

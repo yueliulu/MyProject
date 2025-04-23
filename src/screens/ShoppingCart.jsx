@@ -78,14 +78,6 @@ const ShoppingCart = ({ navigation }) => {
           <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
         <Text style={styles.header}>{t('shopping_cart.header')}</Text>
-        <View style={styles.topNavIcons}>
-          <TouchableOpacity style={styles.bookmarkButton} onPress={() => {}}>
-            <Image source={require('../assets/bookmark.png')} style={styles.bookmarkIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButton} onPress={() => {}}>
-            <Text style={styles.menuButtonText}>...</Text>
-          </TouchableOpacity>
-        </View>
       </View>
       <View style={styles.navBarLine} />
 
@@ -240,14 +232,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: 'contain',
-  },
-  menuButton: {
-    marginLeft: 'auto',
-    padding: 10,
-  },
-  menuButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   navBarLine: {
     height: 1,

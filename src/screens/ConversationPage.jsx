@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
-import { useNavigation } from '@react-navigation/native';
+import { BottomNavigation } from "./Home";            // <-- import Home's footer
+// no need for useNavigation here anymore
 
 const initialConversationData = Array(10)
   .fill()
@@ -56,11 +57,11 @@ function SearchBar({ searchText, setSearchText }) {
   );
 }
 
-function ConversationItem({ item, onDelete, onPress, searchText}) {
-  const navigation = useNavigation();
+function ConversationItem({ item, onDelete, onPress, searchText }) {
   const { t } = useTranslation();
+
   const handleChat = () => {
-    navigation.navigate('ChatScreen');
+    onPress(item);
   };
 
   const renderRightActions = () => (
@@ -68,20 +69,22 @@ function ConversationItem({ item, onDelete, onPress, searchText}) {
       style={styles.deleteButton}
       onPress={() => onDelete(item.id)}
     >
-      <Text style={styles.deleteButtonText}>{t("conversation_page.delete_button")}</Text>
+      <Text style={styles.deleteButtonText}>
+        {t("conversation_page.delete_button")}
+      </Text>
     </TouchableOpacity>
   );
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight) return text;
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-    return parts.map((part, index) =>
+    return parts.map((part, i) =>
       part.toLowerCase() === highlight.toLowerCase() ? (
-        <Text key={index} style={styles.highlightedText}>
+        <Text key={i} style={styles.highlightedText}>
           {part}
         </Text>
       ) : (
-        <Text key={index} style={{ fontFamily: "OpenSans-Regular" }}>
+        <Text key={i} style={{ fontFamily: "OpenSans-Regular" }}>
           {part}
         </Text>
       )
@@ -90,11 +93,14 @@ function ConversationItem({ item, onDelete, onPress, searchText}) {
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
-      <TouchableOpacity style={styles.itemContainer} onPress={() => handleChat(item)}>
+      <TouchableOpacity style={styles.itemContainer} onPress={handleChat}>
         <View style={styles.conversationContent}>
           <View style={styles.userInfo}>
             <View style={styles.avatarContainer}>
-              <View style={styles.avatar} />
+              <Image
+                source={require("../assets/Morgan_James.png")}
+                style={styles.avatar}
+              />
               {item.unreadCount > 0 && (
                 <View style={styles.unreadBadge}>
                   <Text style={styles.unreadCount}>{item.unreadCount}</Text>
@@ -110,9 +116,11 @@ function ConversationItem({ item, onDelete, onPress, searchText}) {
             </View>
           </View>
           {item.hasPhoto && (
-            <View style={styles.photoPreview}>
-              <Text style={styles.photoText}>{t("conversation_page.photo_preview")}</Text>
-            </View>
+            <Image
+              source={require("../assets/table.png")}
+              style={styles.photoPreview}
+              resizeMode="cover"
+            />
           )}
         </View>
       </TouchableOpacity>
@@ -120,105 +128,27 @@ function ConversationItem({ item, onDelete, onPress, searchText}) {
   );
 }
 
-function Footer({ selectedIcon, setSelectedIcon, hasUnreadMessages }) {
-  const { t } = useTranslation();
-  const navigation = useNavigation();
-  
-  return (
-    <View style={styles.footerContainer}>
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => {
-          setSelectedIcon("home")
-          navigation.navigate('HomePage');
-        }}
-        accessible
-        accessibilityLabel={t("conversation_page.home_tab")}
-      >
-        <Image
-          style={[styles.footerIcon, selectedIcon === "home" && styles.selectedIcon]}
-          source={require("../assets/Home.png")}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => {
-          setSelectedIcon("cart")
-          navigation.navigate('ShoppingCart');
-        }}
-        accessible
-        accessibilityLabel={t("conversation_page.cart_tab")}
-      >
-        <Image
-          style={[styles.footerIcon, selectedIcon === "cart" && styles.selectedIcon]}
-          source={require("../assets/Shopping_cart.png")}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.footerItem}>
-        <View style={styles.addButtonContainer}>
-          <View style={styles.addVertical} />
-          <View style={styles.addHorizontal} />
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => {
-          setSelectedIcon("comments")
-          navigation.navigate('ConversationPage');
-        }}
-        accessible
-        accessibilityLabel={t("conversation_page.comments_tab")}
-      >
-        <View>
-          <Image
-            style={[styles.footerIcon, selectedIcon === "comments" && styles.selectedIcon]}
-            source={require("../assets/comment_duotone.png")}
-          />
-          {hasUnreadMessages && <View style={styles.tinyRedDot} />}
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => {
-          setSelectedIcon("user")
-          navigation.navigate('Profile');
-        }}
-        accessible
-        accessibilityLabel={t("conversation_page.user_tab")}
-      >
-        <Image
-          style={[styles.footerIcon, selectedIcon === "user" && styles.selectedIcon]}
-          source={require("../assets/User.png")}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-export default function ConversationPage() {
+export default function ConversationPage({ navigation }) {
   const [conversations, setConversations] = React.useState(initialConversationData);
   const [searchText, setSearchText] = React.useState("");
   const [selectedIcon, setSelectedIcon] = React.useState(null);
 
-  const handleDelete = (id) => {
-    setConversations((prevConversations) =>
-      prevConversations.filter((conversation) => conversation.id !== id)
-    );
+  const handleDelete = id => {
+    setConversations(prev => prev.filter(c => c.id !== id));
   };
 
-  const handleChatPress = (item) => {
-    setConversations((prevConversations) =>
-      prevConversations.map((conversation) =>
-        conversation.id === item.id ? { ...conversation, unreadCount: 0 } : conversation
-      )
+  const handleChatPress = item => {
+    setConversations(prev =>
+      prev.map(c => (c.id === item.id ? { ...c, unreadCount: 0 } : c))
     );
+    navigation.navigate("ChatScreen", { conversationId: item.id });
   };
 
-  const filteredConversations = conversations.filter((conversation) =>
-    conversation.message.toLowerCase().includes(searchText.toLowerCase())
+  const filtered = conversations.filter(c =>
+    c.message.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const hasUnreadMessages = conversations.some((conversation) => conversation.unreadCount > 0);
+  const hasUnread = conversations.some(c => c.unreadCount > 0);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -226,7 +156,7 @@ export default function ConversationPage() {
         <ConversationHeader />
         <SearchBar searchText={searchText} setSearchText={setSearchText} />
         <FlatList
-          data={filteredConversations}
+          data={filtered}
           renderItem={({ item }) => (
             <ConversationItem
               item={item}
@@ -235,14 +165,16 @@ export default function ConversationPage() {
               searchText={searchText}
             />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{ paddingBottom: 80 }}
           style={styles.conversationList}
-          contentContainerStyle={{ paddingBottom: 60 }}
         />
-        <Footer
+
+        <BottomNavigation
+          navigation={navigation}
           selectedIcon={selectedIcon}
           setSelectedIcon={setSelectedIcon}
-          hasUnreadMessages={hasUnreadMessages}
+          hasUnreadMessages={hasUnread}
         />
       </View>
     </TouchableWithoutFeedback>
@@ -250,21 +182,9 @@ export default function ConversationPage() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F7F2",
-  },
-  headerContainer: {
-    paddingTop: 50,
-    paddingBottom: 10,
-    alignItems: "center",
-    backgroundColor: "#F8F7F2",
-  },
-  headerTitle: {
-    fontSize: 24,
-    color: "#000",
-    fontFamily: "OpenSans-Regular",
-  },
+  container: { flex: 1, backgroundColor: "#F8F7F2" },
+  headerContainer: { paddingTop: 50, paddingBottom: 10, alignItems: "center" },
+  headerTitle: { fontSize: 24, fontFamily: "OpenSans-Regular" },
   searchContainer: {
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -275,50 +195,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFF",
   },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: "#000",
-    fontFamily: "OpenSans-Regular",
-  },
-  searchIcon: {
-    width: 24,
-    height: 24,
-    marginLeft: 10,
-  },
-  conversationList: {
-    flex: 1,
-    backgroundColor: "#F8F7F2",
-  },
+  searchInput: { flex: 1, fontSize: 16 },
+  searchIcon: { width: 24, height: 24, marginLeft: 10 },
+  conversationList: { flex: 1 },
   itemContainer: {
     paddingHorizontal: 15,
     paddingVertical: 8,
-    borderBottomWidth: 1,
     borderBottomColor: "#ECECEC",
+    borderBottomWidth: 1,
   },
-  conversationContent: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  avatarContainer: {
-    position: "relative",
-    width: 40,
-    height: 40,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#DDD",
-  },
+  conversationContent: { flexDirection: "row", alignItems: "center" },
+  userInfo: { flexDirection: "row", alignItems: "center", flex: 1 },
+  avatarContainer: { position: "relative", width: 40, height: 40 },
+  avatar: { width: 40, height: 40, borderRadius: 20 },
   unreadBadge: {
     position: "absolute",
     top: -2,
@@ -327,115 +218,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 16,
     height: 16,
+    alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
   },
-  unreadCount: {
-    color: "#FFF",
-    fontSize: 10,
-    fontFamily: "OpenSans-Regular",
-  },
-  messageInfo: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  userName: {
-    fontSize: 16,
-    color: "#000",
-    fontFamily: "OpenSans-Regular",
-  },
-  lastMessage: {
-    fontSize: 14,
-    color: "#555",
-    fontFamily: "OpenSans-Regular",
-  },
-  highlightedText: {
-    backgroundColor: "#FBC8AE",
-    fontFamily: "OpenSans-Regular",
-  },
-  messageDate: {
-    fontSize: 12,
-    color: "#999",
-    fontFamily: "OpenSans-Regular",
-  },
-  photoPreview: {
-    width: 92,
-    height: 60,
-    marginLeft: 10,
-    borderRadius: 4,
-    backgroundColor: "#EEE",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  photoText: {
-    fontSize: 8,
-    textAlign: "center",
-    color: "#555",
-    fontFamily: "OpenSans-Regular",
-  },
-  deleteButton: {
-    backgroundColor: "#FF4444",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 100,
-    height: "100%",
-  },
-  deleteButtonText: {
-    color: "#FFF",
-    fontSize: 14,
-    fontFamily: "OpenSans-Regular",
-  },
-  footerContainer: {
-    height: 60,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "#F8F7F2",
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
-  footerItem: {
-    flex: 1,
-    alignItems: "center",
-    marginHorizontal: 0,
-    paddingHorizontal: 0,
-  },
-  footerIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
-  },
-  selectedIcon: {
-    tintColor: "#FF8F2D",
-  },
-  addButtonContainer: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
-    width: 36,
-    height: 36,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-  },
-  addVertical: {
-    position: "absolute",
-    width: 4,
-    height: 24,
-    backgroundColor: "#FF8F2D",
-  },
-  addHorizontal: {
-    position: "absolute",
-    width: 24,
-    height: 4,
-    backgroundColor: "#FF8F2D",
-  },
-  tinyRedDot: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    backgroundColor: "#FF4444",
-    borderRadius: 4,
-    width: 8,
-    height: 8,
-  },
+  unreadCount: { color: "#FFF", fontSize: 10 },
+  messageInfo: { flex: 1, marginLeft: 10 },
+  userName: { fontSize: 16 },
+  lastMessage: { fontSize: 14, color: "#555" },
+  highlightedText: { backgroundColor: "#FBC8AE" },
+  messageDate: { fontSize: 12, color: "#999" },
+  photoPreview: { width: 92, height: 60, marginLeft: 10, borderRadius: 4 },
+  deleteButton: { backgroundColor: "#FF4444", width: 100, justifyContent: "center", alignItems: "center" },
+  deleteButtonText: { color: "#FFF", fontSize: 14 },
 });

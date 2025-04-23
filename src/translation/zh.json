@@ -42,7 +42,7 @@
   "chat_screen": {
     "header_title": "Aaaaa",
     "header_rating": "4.98/5",
-    "item_price": "¥88.88",
+    "item_price": "$50.5",
     "item_details": "配送/自取",
     "send_message_placeholder": "发送消息",
     "send_button": "发送",
@@ -52,6 +52,33 @@
     "go_to_profile": "个人主页",
     "block": "屏蔽",
     "cancel": "取消"
+  },
+  "checkout_screen": {
+    "header": "结账",
+    "amount_label": "小计：",
+    "shipping_label": "运费：",
+    "tax_label": "含税（GST + PST）：",
+    "total_label": "订单总计：",
+    "proceed_to_shipping": "Proceed to Shipping"
+  },
+  "shipping_page": {
+    "header": "运送信息",
+    "saved_addresses": "默认地址",
+    "save_address": "保存",
+    "first_name": "名字",
+    "last_name": "姓氏",
+    "email": "电子邮件",
+    "phone": "电话号码",
+    "city": "城市",
+    "address": "送货地址",
+    "country": "国家",
+    "proceed_to_checkout": "继续结账",
+    "payment_information": "支付信息",
+    "card_name": "持卡人姓名",
+    "card_number": "卡号",
+    "confirm_order": "确认订单",
+    "show_more": "显示更多",
+    "hide_addresses": "隐藏地址"
   },
   "home_page": {
     "feed": "动态",
@@ -86,13 +113,5 @@
     "delivery": "快递",
     "user": "用户",
     "productName": "商品名称"
-  },
-  "order_items_page": {
-    "header": "物品 ({{count}})",
-    "items": {
-      "table": "桌子",
-      "bed": "床",
-      "pink_chair_sofa": "粉色椅子沙发"
-    }
   }
 }
