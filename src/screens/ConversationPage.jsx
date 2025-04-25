@@ -12,15 +12,17 @@ import {
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
-import { BottomNavigation } from "./Home";            // <-- import Home's footer
-// no need for useNavigation here anymore
+import { BottomNavigation } from "./Home";
 
 const initialConversationData = Array(10)
   .fill()
   .map((_, index) => ({
     id: index.toString(),
     name: index % 2 === 0 ? "Aaaaa" : "Bbbbb",
-    message: index % 2 === 0 ? "When did you buy the desk?" : "What's desk size?",
+    message:
+      index % 2 === 0
+        ? "When did you buy the desk?"
+        : "What's desk size?",
     date: "11-02",
     unreadCount: 3,
     hasPhoto: true,
@@ -60,6 +62,16 @@ function SearchBar({ searchText, setSearchText }) {
 function ConversationItem({ item, onDelete, onPress, searchText }) {
   const { t } = useTranslation();
 
+  const avatarSource =
+    item.name === "Aaaaa"
+      ? require("../assets/Emma.png")
+      : require("../assets/Morgan_James.png");
+
+  const photoSource =
+    item.name === "Bbbbb"
+      ? require("../assets/Bed.png")
+      : require("../assets/table.png");
+
   const handleChat = () => {
     onPress(item);
   };
@@ -97,10 +109,7 @@ function ConversationItem({ item, onDelete, onPress, searchText }) {
         <View style={styles.conversationContent}>
           <View style={styles.userInfo}>
             <View style={styles.avatarContainer}>
-              <Image
-                source={require("../assets/Morgan_James.png")}
-                style={styles.avatar}
-              />
+              <Image source={avatarSource} style={styles.avatar} />
               {item.unreadCount > 0 && (
                 <View style={styles.unreadBadge}>
                   <Text style={styles.unreadCount}>{item.unreadCount}</Text>
@@ -117,7 +126,7 @@ function ConversationItem({ item, onDelete, onPress, searchText }) {
           </View>
           {item.hasPhoto && (
             <Image
-              source={require("../assets/table.png")}
+              source={photoSource}
               style={styles.photoPreview}
               resizeMode="cover"
             />
@@ -129,32 +138,39 @@ function ConversationItem({ item, onDelete, onPress, searchText }) {
 }
 
 export default function ConversationPage({ navigation }) {
-  const [conversations, setConversations] = React.useState(initialConversationData);
+  const [conversations, setConversations] = React.useState(
+    initialConversationData
+  );
   const [searchText, setSearchText] = React.useState("");
   const [selectedIcon, setSelectedIcon] = React.useState(null);
 
-  const handleDelete = id => {
-    setConversations(prev => prev.filter(c => c.id !== id));
+  const handleDelete = (id) => {
+    setConversations((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const handleChatPress = item => {
-    setConversations(prev =>
-      prev.map(c => (c.id === item.id ? { ...c, unreadCount: 0 } : c))
+  const handleChatPress = (item) => {
+    setConversations((prev) =>
+      prev.map((c) =>
+        c.id === item.id ? { ...c, unreadCount: 0 } : c
+      )
     );
     navigation.navigate("ChatScreen", { conversationId: item.id });
   };
 
-  const filtered = conversations.filter(c =>
+  const filtered = conversations.filter((c) =>
     c.message.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const hasUnread = conversations.some(c => c.unreadCount > 0);
+  const hasUnread = conversations.some((c) => c.unreadCount > 0);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <ConversationHeader />
-        <SearchBar searchText={searchText} setSearchText={setSearchText} />
+        <SearchBar
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
         <FlatList
           data={filtered}
           renderItem={({ item }) => (
@@ -165,7 +181,7 @@ export default function ConversationPage({ navigation }) {
               searchText={searchText}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 80 }}
           style={styles.conversationList}
         />
@@ -183,7 +199,11 @@ export default function ConversationPage({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F7F2" },
-  headerContainer: { paddingTop: 50, paddingBottom: 10, alignItems: "center" },
+  headerContainer: {
+    paddingTop: 50,
+    paddingBottom: 10,
+    alignItems: "center",
+  },
   headerTitle: { fontSize: 24, fontFamily: "OpenSans-Regular" },
   searchContainer: {
     paddingHorizontal: 15,
@@ -206,7 +226,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ECECEC",
     borderBottomWidth: 1,
   },
-  conversationContent: { flexDirection: "row", alignItems: "center" },
+  conversationContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   userInfo: { flexDirection: "row", alignItems: "center", flex: 1 },
   avatarContainer: { position: "relative", width: 40, height: 40 },
   avatar: { width: 40, height: 40, borderRadius: 20 },
@@ -228,6 +251,11 @@ const styles = StyleSheet.create({
   highlightedText: { backgroundColor: "#FBC8AE" },
   messageDate: { fontSize: 12, color: "#999" },
   photoPreview: { width: 92, height: 60, marginLeft: 10, borderRadius: 4 },
-  deleteButton: { backgroundColor: "#FF4444", width: 100, justifyContent: "center", alignItems: "center" },
+  deleteButton: {
+    backgroundColor: "#FF4444",
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   deleteButtonText: { color: "#FFF", fontSize: 14 },
 });

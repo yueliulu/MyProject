@@ -27,9 +27,7 @@ const HomePage = ({ navigation }) => {
     priceHighToLow: false,
     priceLowToHigh: false,
   });
-
   const [activeLocationTab, setActiveLocationTab] = useState('state');
-
   const [categoryFilters, setCategoryFilters] = useState({
     bedroom: false,
     livingRoom: false,
@@ -236,12 +234,51 @@ const SearchBar = () => {
 };
 
 const Divider = () => <View style={styles.divider} />;
-
 const products = [
-  { id:1,name:'productName',price:50,tag:'nearYou',location:'NYC',type:'pickUp',userIndex:1 },
-  { id:2,name:'productName',price:80,tag:'priceDrop',location:'NYC',type:'delivery',userIndex:2 },
-  { id:3,name:'productName',price:50,tag:'nearYou',location:'NYC',type:'pickUp',userIndex:3 },
-  { id:4,name:'productName',price:80,tag:'priceDrop',location:'NYC',type:'delivery',userIndex:4 },
+  {
+    id: 1,
+    name: 'productName',
+    price: 50,
+    tag: 'nearYou',
+    location: 'NYC',
+    type: 'pickUp',
+    userIndex: 1,
+    image: require('../assets/table.png'),
+    avatar: require('../assets/Emma.png'),
+  },
+  {
+    id: 2,
+    name: 'productName',
+    price: 80,
+    tag: 'priceDrop',
+    location: 'NYC',
+    type: 'delivery',
+    userIndex: 2,
+    image: require('../assets/lamp.png'),
+    avatar: require('../assets/Allen.png'),
+  },
+  {
+    id: 3,
+    name: 'productName',
+    price: 50,
+    tag: 'nearYou',
+    location: 'NYC',
+    type: 'pickUp',
+    userIndex: 3,
+    image: require('../assets/Bed.png'),
+    avatar: require('../assets/Morgan_James.png'),
+  },
+  {
+    id: 4,
+    name: 'productName',
+    price: 80,
+    tag: 'priceDrop',
+    location: 'NYC',
+    type: 'delivery',
+    userIndex: 4,
+    image: require('../assets/chair.png'),
+    avatar: require('../assets/Tom.png'),
+  },
 ];
 
 const ProductListing = ({ navigation }) => {
@@ -249,9 +286,9 @@ const ProductListing = ({ navigation }) => {
   return (
     <View style={styles.productListing}>
       <Text style={styles.featuredText}>{t('home_page.featuredProducts')}</Text>
-      {[0,2].map(i => (
+      {[0, 2].map(i => (
         <View key={i} style={styles.productRow}>
-          {products.slice(i,i+2).map(p => (
+          {products.slice(i, i + 2).map(p => (
             <ProductCard key={p.id} product={p} navigation={navigation} />
           ))}
         </View>
@@ -262,14 +299,14 @@ const ProductListing = ({ navigation }) => {
 
 const ProductCard = ({ product, navigation }) => {
   const { t } = useTranslation();
-  const { id,name,price,tag,location,type,userIndex } = product;
+  const { id, name, price, tag, location, type, userIndex, image, avatar } = product;
   return (
     <TouchableOpacity
       style={styles.productCard}
-      onPress={() => navigation.navigate('ProductDetailPage',{productId:id})}
+      onPress={() => navigation.navigate('ProductDetailPage', { productId: id })}
     >
       <View style={styles.productImageContainer}>
-        <Image source={require('../assets/table.png')} style={styles.productImage}/>
+        <Image source={image} style={styles.productImage} />
         <Text style={styles.productTag}>{t(`home_page.${tag}`)}</Text>
       </View>
       <Text style={styles.productName}>{t(`home_page.${name}`)} {price}</Text>
@@ -279,7 +316,7 @@ const ProductCard = ({ product, navigation }) => {
           <Text style={styles.tagText}>{t(`home_page.${type}`)}</Text>
         </View>
         <View style={styles.userInfo}>
-          <Image source={require('../assets/Morgan_James.png')} style={styles.userImage} />
+          <Image source={avatar} style={styles.userImage} />
           <Text style={styles.userText}>{t('home_page.user')} {userIndex}</Text>
         </View>
       </View>
@@ -296,9 +333,9 @@ const BottomNavigation = ({ navigation }) => {
   ];
   return (
     <View style={styles.bottomNavigation}>
-      {icons.map((ic,idx) => (
-        <TouchableOpacity key={idx} onPress={()=>navigation.navigate(routes[idx])}>
-          <Image source={ic} style={styles.bottomIcon}/>
+      {icons.map((ic, idx) => (
+        <TouchableOpacity key={idx} onPress={() => navigation.navigate(routes[idx])}>
+          <Image source={ic} style={styles.bottomIcon} />
         </TouchableOpacity>
       ))}
     </View>
@@ -457,7 +494,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#555',
     padding: 3,
-    backgroundColor: '#EEE',
+    backgroundColor: '#FBC8AE',
     borderRadius: 4,
     marginRight: 5,
   },
@@ -528,7 +565,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginRight: 20,
   },
-  locationOverlay: {},
   locationTabRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

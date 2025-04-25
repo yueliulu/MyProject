@@ -86,7 +86,6 @@ const ChatScreen = ({ navigation }) => {
     );
   };
 
-  // New function to handle navigation to CheckoutScreen
   const handleBuyButtonPress = () => {
     navigation.navigate('CheckoutScreen');
   };
@@ -102,7 +101,7 @@ const ChatScreen = ({ navigation }) => {
       >
         {!isUser && (
           <Image
-            source={require('../assets/Morgan_James.png')}
+            source={require('../assets/Emma.png')}
             style={styles.avatar}
           />
         )}
